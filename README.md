@@ -1,70 +1,89 @@
-# Hi, I'm Taimoor Nasir 👋
-### 🚀 AI | Machine Learning | Computer Vision | Agentic AI
+# 🐦 Flappy Bird Game
+
+A fun and addictive recreation of the classic **Flappy Bird** — built entirely with **HTML**, **CSS**, and **JavaScript** in a single file. Guide your bird through an endless stream of pipes and see how far you can go!
 
 ---
 
-## 👨‍💻 About Me
+## 🚀 Features
 
-- 🔥 Deeply passionate about **Machine Learning**, **Computer Vision**, **Data Science**, **Agentic AI**, and **Artificial Intelligence**
-- 🤖 Building intelligent automation agents using **n8n**
-- 🧠 Developing ML & AI systems with **Python**
-- 📊 Fascinated by data-driven decision making and intelligent autonomous systems
-- 🛠 Previously engineered a personal **AI Chatbot** using Python
-- 🌱 Continuously exploring **Deep Learning**, **Agent Architectures**, and **Advanced Computer Science**
-- 🤝 Open to collaborating on **AI**, **ML**, **Computer Vision** & **Agentic AI** projects
+- 🎮 Smooth, responsive controls for a seamless experience
+- 🏗️ Randomly generated pipes for endless, unpredictable gameplay
+- 🏆 Real-time score tracking
+- 💥 Pixel-perfect collision detection
+- 🔄 Instant restart to jump back in without delay
 
 ---
 
-## 🧰 Tech Stack
+## 📂 Project Structure
 
-**👨‍💻 Languages**
-
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
-![C++](https://img.shields.io/badge/C++-00599C?style=flat&logo=c%2B%2B&logoColor=white)
-
-**🤖 AI & Machine Learning**
-
-![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat&logo=pandas&logoColor=white)
-![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat&logo=numpy&logoColor=white)
-![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?style=flat&logo=python&logoColor=white)
-![Scikit-learn](https://img.shields.io/badge/Scikit--learn-F7931E?style=flat&logo=scikit-learn&logoColor=white)
-![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=flat&logo=opencv&logoColor=white)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=flat&logo=tensorflow&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)
-
-**🔄 Automation & Agents**
-
-![n8n](https://img.shields.io/badge/n8n-EA4B71?style=flat&logo=n8n&logoColor=white)
-- APIs & Workflow Integrations
-
-**🧩 Tools**
-
-![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)
+```
+Flappy-Bird-Game/
+│
+├── index.html        # Complete game — HTML, CSS, and JavaScript in one file
+├── assets/           # Game assets
+│   ├── background.png
+│   └── bird.png
+├── README.md         # Project documentation
+└── LICENSE           # License information
+```
 
 ---
 
-## 🚀 Current Focus
+## 🛠️ Installation
 
-- 🧠 Building **Agentic AI** systems
-- 📊 Creating end-to-end **ML pipelines**
-- 👁 Developing **Computer Vision** applications
-- 🤖 Designing autonomous AI agents for real-world tasks
+**1. Clone the repository:**
 
----
+```bash
+git clone https://github.com/taimoornasir-AI/Flappy-Bird-Game.git
+cd Flappy-Bird-Game
+```
 
-## 💡 Vision
+**2. Launch the game:**
 
-> To combine **Artificial Intelligence**, **Agentic Systems**, and **Data Science** to build autonomous systems that enhance productivity, automate complex workflows, and make AI more practical and human-centered.
-
----
-
-## 📫 Connect With Me
-
-[![Email](https://img.shields.io/badge/Email-taimoor.nasir.dev%40gmail.com-D14836?style=flat&logo=gmail&logoColor=white)](mailto:taimoor.nasir.dev@gmail.com)
-
-[![GitHub](https://img.shields.io/badge/GitHub-taimoornasir--AI-181717?style=flat&logo=github&logoColor=white)](https://github.com/taimoornasir-AI)
+Open `index.html` in any modern web browser — no server or dependencies required.
 
 ---
 
-⭐ *"Building intelligent systems that explore beyond limits."*
+## 🎮 How to Play
+
+1. Press **Spacebar** (or **tap** on mobile) to flap the bird's wings
+2. Steer through the gaps between pipes
+3. Don't hit the pipes or the ground
+4. Keep going and beat your high score!
+
+---
+
+## 🖼️ Screenshots
+
+### Start Screen
+![Start Screen](assets/background.png)
+
+---
+
+## 📝 Customization
+
+| What to Change | How |
+|---|---|
+| 🐦 Bird skin | Replace `assets/bird.png` with your own image |
+| ⚡ Pipe speed | Adjust the `speed` variable in `index.html` |
+| 🌊 Difficulty | Tweak pipe gap size or bird gravity in the JavaScript section |
+
+---
+
+## 💡 Future Enhancements
+
+- 🏅 Global leaderboard system
+- 🎨 Multiple themes and level designs
+- 👥 Multiplayer mode for head-to-head competition
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License** — you're free to use, modify, and distribute it with proper attribution. See [`LICENSE`](LICENSE) for full details.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Fork the repo, make your changes, and open a pull request — let's make it even better together.
