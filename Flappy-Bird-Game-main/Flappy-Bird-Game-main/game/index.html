@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="shortcut icon" href="favicon_io/favicon.ico" type="image/x-icon">
+  <title>Flappy Bird</title>
+  <style>
+    /* Previous CSS remains unchanged */
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(to bottom, #70c5ce, #ffffff);
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      touch-action: none;
+    }
+
+    #gameTitle {
+      text-align: center;
+      font-size: 48px;
+      font-weight: bold;
+      padding: 20px 0;
+      font-family: Arial, sans-serif;
+    }
+
+    canvas {
+      border: 10px solid #000;
+      display: block;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      touch-action: none;
+    }
+
+    #gameOverPopup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border: 2px solid black;
+      padding: 20px;
+      text-align: center;
+      display: none;
+    }
+
+    #gameOverPopup button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: red;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    #gameOverPopup button:hover {
+      background: darkred;
+    }
+
+    #startText {
+      position: absolute;
+      font-size: 40px;
+      color: black;
+      text-align: center;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0;
+      animation: fadeIn 2s forwards;
+      display: none;
+    }
+
+    #startPopup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border: 2px solid black;
+      padding: 20px;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    #startButton {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    #startButton:hover {
+      background: #45a049;
+    }
+
+    #countdown {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 72px;
+      color: black;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+    }
+
+    #credit {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    @media (max-width: 800px) {
+      #startText {
+        font-size: 30px;
+      }
+
+      canvas {
+        width: 100%;
+        height: auto;
+      }
+
+      #gameTitle {
+        font-size: 36px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      #startText {
+        font-size: 20px;
+      }
+
+      #gameTitle {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="gameTitle">FLAPPY BIRD</div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="credit">MADE BY MUHAMMAD AHMAD ASIF</div>
+  
+  <div id="startPopup">
+    <h2>Welcome to Flappy Bird!</h2>
+    <p>Click Start to begin your adventure</p>
+    <button id="startButton">Start Game</button>
+  </div>
+
+  <div id="countdown">3</div>
+
+  <div id="gameOverPopup">
+    <h2>GAME OVER</h2>
+    <p id="finalScore">Score: 0</p>
+    <button id="restartButton">Try Again</button>
+  </div>
+  <div id="startText">Click or Tap to Start the Game</div>
+  
+  <audio id="themeSong" loop>
+    <source src="assets/theme.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    // Previous JavaScript code remains unchanged until birdPhysics
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const startPopup = document.getElementById('startPopup');
+    const countdownDiv = document.getElementById('countdown');
+    let countdown = 3;
+
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    function setCanvasDimensions() {
+      canvas.width = window.innerWidth > 800 ? 800 : window.innerWidth - 20;
+      canvas.height = window.innerHeight > 400 ? 400 : window.innerHeight - 100;
+    }
+
+    setCanvasDimensions();
+    window.addEventListener('resize', setCanvasDimensions);
+
+    const backgroundImg = new Image();
+    backgroundImg.src = "https://i.postimg.cc/FYLZBtdR/background.png";
+
+    const birdImg = new Image();
+    birdImg.src = "https://i.postimg.cc/WF2wzh9F/bird.png";
+
+    const scoreSound = new Audio('assets/point.mp3');
+    const gameOverSound = new Audio('assets/die.mp3');
+
+    // Updated birdPhysics for slower mobile movement
+    const birdPhysics = {
+      desktop: {
+        gravity: 0.25,
+        lift: -6
+      },
+      mobile: {
+        gravity: 0.25,  // Reduced from 0.4
+        lift: -5        // Reduced from -6.5
+      }
+    };
+
+    // Rest of the JavaScript code remains unchanged
+    const bird = {
+      x: 100,
+      y: canvas.height / 2,
+      width: 40,
+      height: 40,
+      gravity: isMobile ? birdPhysics.mobile.gravity : birdPhysics.desktop.gravity,
+      lift: isMobile ? birdPhysics.mobile.lift : birdPhysics.desktop.lift,
+      velocity: 0
+    };
+
+    const pipes = [];
+    const pipeWidth = 80;
+    const gap = 150;
+    const pipeColor = "#4CAF50";
+    let pipeTimer = 0;
+
+    let score = 0;
+    let gameRunning = false;
+    let gameOver = false;
+    let lastTouchTime = 0;
+
+    document.getElementById('startButton').addEventListener('click', () => {
+      startPopup.style.display = 'none';
+      startCountdown();
+    });
+
+    function startCountdown() {
+      countdownDiv.style.display = 'block';
+      countdownDiv.textContent = countdown;
+
+      const countdownInterval = setInterval(() => {
+        countdown--;
+        countdownDiv.textContent = countdown;
+
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          countdownDiv.style.display = 'none';
+          gameRunning = true;
+          document.getElementById("themeSong").play().catch(() => {});
+          draw();
+          countdown = 3;
+        }
+      }, 1000);
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.code === "Space" && gameRunning && !gameOver) {
+        e.preventDefault();
+        bird.velocity = bird.lift;
+      }
+    });
+
+    const handleTouch = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const currentTime = performance.now();
+      if (currentTime - lastTouchTime < 16) {
+        return;
+      }
+      lastTouchTime = currentTime;
+      
+      if (gameRunning && !gameOver) {
+        bird.velocity = bird.lift;
+      }
+    };
+
+    const handleMouseClick = (e) => {
+      if (!isMobile) {
+        if (gameRunning && !gameOver) {
+          bird.velocity = bird.lift;
+        }
+      }
+    };
+
+    if (isMobile) {
+      canvas.addEventListener("touchstart", handleTouch, { passive: false, capture: true });
+      canvas.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }, { passive: false, capture: true });
+    } else {
+      canvas.addEventListener("mousedown", handleMouseClick);
+    }
+
+    function drawBird() {
+      ctx.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
+    }
+
+    function drawPipes() {
+      pipes.forEach(pipe => {
+        ctx.fillStyle = pipeColor;
+        ctx.fillRect(pipe.x, 0, pipeWidth, pipe.top);
+        ctx.fillRect(pipe.x, pipe.bottom, pipeWidth, canvas.height - pipe.bottom);
+      });
+    }
+
+    function drawBackground() {
+      ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+    }
+
+    function updateGame() {
+      bird.velocity += bird.gravity;
+      bird.y += bird.velocity;
+
+      pipeTimer++;
+      if (pipeTimer % 100 === 0) {
+        const topHeight = Math.random() * (canvas.height / 2);
+        pipes.push({
+          x: canvas.width,
+          top: topHeight,
+          bottom: topHeight + gap,
+          passed: false
+        });
+      }
+
+      pipes.forEach(pipe => {
+        pipe.x -= 2;
+
+        if (
+          bird.x + bird.width > pipe.x &&
+          bird.x < pipe.x + pipeWidth &&
+          (bird.y < pipe.top || bird.y + bird.height > pipe.bottom)
+        ) {
+          endGame();
+        }
+
+        if (!pipe.passed && pipe.x + pipeWidth < bird.x) {
+          score++;
+          pipe.passed = true;
+          scoreSound.play();
+        }
+
+        if (pipe.x + pipeWidth < 0) {
+          pipes.shift();
+        }
+      });
+
+      if (bird.y + bird.height >= canvas.height || bird.y <= 0) {
+        endGame();
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (gameRunning && !gameOver) {
+        drawBackground();
+        updateGame();
+        drawPipes();
+        drawBird();
+
+        ctx.fillStyle = "black";
+        ctx.font = "20px Arial";
+        ctx.fillText(`Score: ${score}`, canvas.width - 100, 30);
+
+        requestAnimationFrame(draw);
+      }
+    }
+
+    function endGame() {
+      gameRunning = false;
+      gameOver = true;
+      gameOverSound.play();
+      document.getElementById("gameOverPopup").style.display = "block";
+      document.getElementById("finalScore").innerText = `Score: ${score}`;
+      document.getElementById("themeSong").pause();
+    }
+
+    function restartGame() {
+      bird.y = canvas.height / 2;
+      bird.velocity = 0;
+      pipes.length = 0;
+      pipeTimer = 0;
+      score = 0;
+      gameRunning = false;
+      gameOver = false;
+      document.getElementById("gameOverPopup").style.display = "none";
+      startPopup.style.display = "block";
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBird();
+    }
+
+    document.getElementById("restartButton").addEventListener("click", restartGame);
+
+    drawBird();
+  </script>
+</body>
+</html>
