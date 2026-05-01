@@ -62,6 +62,7 @@
 ## 📫 Connect With Me
 
 [![Email](https://img.shields.io/badge/Email-taimoor.nasir.dev%40gmail.com-D14836?style=flat&logo=gmail&logoColor=white)](mailto:taimoor.nasir.dev@gmail.com)
+
 [![GitHub](https://img.shields.io/badge/GitHub-taimoornasir--AI-181717?style=flat&logo=github&logoColor=white)](https://github.com/taimoornasir-AI)
 
 ---
